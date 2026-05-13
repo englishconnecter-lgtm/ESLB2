@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualisation and Mental Imagery - Interactive Worksheet</title>
+  <style>
+    :root{
+      --navy:#132238;
+      --blue:#284b63;
+      --teal:#3c6e71;
+      --cream:#f7f3e8;
+      --white:#ffffff;
+      --coral:#d96c4a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--cream);color:var(--navy);line-height:1.55;}
+    header{background:linear-gradient(135deg,var(--navy),var(--blue));color:var(--white);padding:34px 22px;}
+    .header-wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:center;}
+    .brand{display:inline-block;background:var(--coral);color:var(--white);font-weight:700;padding:8px 12px;border-radius:12px;margin-bottom:14px;letter-spacing:.3px;}
+    h1{margin:0 0 10px;font-size:clamp(2rem,4vw,3.35rem);line-height:1.05;}
+    .subtitle{max-width:760px;font-size:1.08rem;opacity:.95;margin:0;}
+    .video-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);padding:12px;border-radius:22px;box-shadow:0 14px 30px rgba(0,0,0,.22);}
+    .video-card a{color:var(--white);text-decoration:none;display:block;}
+    .thumb-wrap{position:relative;overflow:hidden;border-radius:16px;background:var(--navy);aspect-ratio:16/9;}
+    .thumb-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;transition:transform .25s ease, opacity .25s ease;}
+    .video-card:hover img{transform:scale(1.04);opacity:1;}
+    .play{position:absolute;inset:0;display:grid;place-items:center;}
+    .play span{width:68px;height:48px;border-radius:16px;background:var(--coral);display:grid;place-items:center;font-size:1.6rem;box-shadow:0 8px 24px rgba(0,0,0,.35);}
+    .video-title{margin:10px 4px 2px;font-weight:700;}
+    main{max-width:1120px;margin:0 auto;padding:24px 18px 46px;}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 26px;}
+    button{border:0;background:var(--teal);color:var(--white);font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer;transition:transform .15s ease, background .15s ease;}
+    button:hover{transform:translateY(-1px);background:var(--blue);}
+    .reset-btn{background:var(--coral);}
+    section{background:var(--white);border-radius:24px;padding:24px;margin-bottom:22px;border:1px solid rgba(19,34,56,.12);box-shadow:0 10px 26px rgba(19,34,56,.08);}
+    h2{margin:0 0 12px;font-size:1.45rem;color:var(--blue);}
+    .note{background:var(--cream);border-left:5px solid var(--coral);padding:12px 14px;border-radius:12px;margin:14px 0;}
+    .two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start;}
+    .question-list{display:grid;gap:12px;}
+    .q{background:#fbfaf6;border:1px solid rgba(19,34,56,.10);padding:14px;border-radius:16px;}
+    .q label{display:block;font-weight:700;margin-bottom:6px;}
+    select,input[type="text"],textarea{width:100%;border:1.5px solid rgba(19,34,56,.24);border-radius:12px;padding:10px 12px;font:inherit;color:var(--navy);background:var(--white);}
+    textarea{min-height:92px;resize:vertical;}
+    .choices{background:var(--cream);border-radius:18px;padding:16px;position:sticky;top:12px;}
+    .choices h3{margin:0 0 10px;color:var(--blue);}
+    .choice-grid{display:grid;gap:8px;}
+    .choice{background:var(--white);border:1px solid rgba(19,34,56,.14);padding:9px 11px;border-radius:12px;font-weight:700;}
+    .mini{font-size:.92rem;opacity:.9;}
+    .answers{display:none;margin-top:14px;padding:14px;background:#eef4f4;border:1px solid rgba(60,110,113,.25);border-radius:16px;}
+    .answers.show{display:block;}
+    .answers strong{color:var(--teal);}
+    .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+    .pill{background:var(--cream);border:1px solid rgba(19,34,56,.16);border-radius:999px;padding:7px 10px;font-weight:700;}
+    .discussion{display:grid;gap:14px;}
+    .discussion .q{border-left:5px solid var(--teal);}
+    .check-result{margin-top:10px;font-weight:700;}
+    .correct{color:#236147}.wrong{color:#a6422b}
+    footer{text-align:center;padding:22px;color:var(--blue);font-size:.92rem;}
+    @media (max-width:840px){.header-wrap,.two-col{grid-template-columns:1fr}.choices{position:static}}
+
+
+    .drag-bank{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .drag-item{
+      background:var(--white);
+      border:1.5px solid rgba(19,34,56,.18);
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:grab;
+      user-select:none;
+      box-shadow:0 4px 10px rgba(19,34,56,.06);
+    }
+
+    .drag-item:active{cursor:grabbing}
+
+    .drop-zone{
+      min-height:44px;
+      margin-top:8px;
+      border:2px dashed rgba(60,110,113,.45);
+      border-radius:12px;
+      background:var(--white);
+      padding:8px;
+      display:flex;
+      align-items:center;
+      color:rgba(19,34,56,.65);
+    }
+
+    .drop-zone.over{
+      background:#eef4f4;
+      border-color:var(--teal);
+    }
+
+    .drop-zone .drag-item{
+      width:100%;
+      margin:0;
+      cursor:grab;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-wrap">
+      <div>
+        <div class="brand">ESL CONNECT · PERSONAL DEVELOPMENT</div>
+        <h1>Can Visualisation Help You Achieve a Better Future?</h1>
+        <p class="subtitle">An interactive B1+/B2 worksheet about mental imagery, goals, motivation and preparing for challenges.</p>
+      </div>
+      <div class="video-card">
+        <a href="https://www.youtube.com/watch?v=X0W7V2fWJzA" target="_blank" rel="noopener">
+          <div class="thumb-wrap">
+            <img src="https://img.youtube.com/vi/X0W7V2fWJzA/maxresdefault.jpg" alt="BBC Ideas video thumbnail about visualisation" onerror="this.src='https://img.youtube.com/vi/X0W7V2fWJzA/hqdefault.jpg'">
+            <div class="play"><span>▶</span></div>
+          </div>
+          <div class="video-title">Watch the video on YouTube</div>
+        </a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="toolbar">
+      <button onclick="showAllAnswers()">Reveal all answers</button>
+      <button onclick="hideAllAnswers()">Hide all answers</button>
+      <button class="reset-btn" onclick="resetWorksheet()">Reset worksheet</button>
+    </div>
+
+    <section>
+      <h2>1. Before watching: first thoughts</h2>
+      <p class="note">Discuss these questions before watching. Use examples from sport, school, work or personal goals.</p>
+      <div class="discussion">
+        <div class="q"><label>1. Do you think imagining success can actually improve performance?</label><textarea placeholder="Write your ideas here..."></textarea></div>
+        <div class="q"><label>2. When do people usually visualise something before doing it?</label><textarea placeholder="Give examples..."></textarea></div>
+        <div class="q"><label>3. Can positive thinking ever become unrealistic or unhelpful?</label><textarea placeholder="Write a balanced answer..."></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Vocabulary matching</h2>
+      <p>Match each word or phrase with the correct meaning. The answer choices are in the side column.</p>
+      <div class="two-col">
+        <div class="question-list">
+          <div class="q"><label>1. visualisation</label><select data-answer="B"><option value="">Choose...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></div>
+          <div class="q"><label>2. mental imagery</label><select data-answer="A"><option value="">Choose...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></div>
+          <div class="q"><label>3. outcome</label><select data-answer="D"><option value="">Choose...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></div>
+          <div class="q"><label>4. to boost</label><select data-answer="F"><option value="">Choose...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></div>
+          <div class="q"><label>5. vivid</label><select data-answer="C"><option value="">Choose...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></div>
+          <div class="q"><label>6. to prepare for a task</label><select data-answer="E"><option value="">Choose...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select></div>
+          <button onclick="checkSelects(this)">Check section</button><div class="check-result"></div>
+        </div>
+        <aside class="choices"><h3>Answer choices</h3><div class="choice-grid">
+          <div class="choice">A. pictures or experiences created in the mind</div>
+          <div class="choice">B. the act of imagining something clearly</div>
+          <div class="choice">C. very clear, detailed and strong</div>
+          <div class="choice">D. the final result of an action</div>
+          <div class="choice">E. to get ready before doing something</div>
+          <div class="choice">F. to increase or improve something</div>
+        </div></aside>
+      </div>
+      <div class="answers"><strong>Answers:</strong> 1 B, 2 A, 3 D, 4 F, 5 C, 6 E.</div>
+      <button onclick="toggleAnswers(this)">Reveal / hide answers</button>
+    </section>
+
+    <section>
+      <h2>3. Key collocations</h2>
+      <p>Drag each word into the correct phrase. The answer choices are in the side column.</p>
+
+      <div class="two-col">
+        <div class="question-list">
+          <div class="q"><label>1. set a clear ______</label><div class="drop-zone" data-answer="goal">Drop the answer here</div></div>
+          <div class="q"><label>2. imagine a future ______</label><div class="drop-zone" data-answer="scenario">Drop the answer here</div></div>
+          <div class="q"><label>3. improve your ______</label><div class="drop-zone" data-answer="performance">Drop the answer here</div></div>
+          <div class="q"><label>4. make an important ______</label><div class="drop-zone" data-answer="decision">Drop the answer here</div></div>
+          <div class="q"><label>5. practise a difficult ______</label><div class="drop-zone" data-answer="conversation">Drop the answer here</div></div>
+          <button onclick="checkDragDrop(this)">Check section</button><div class="check-result"></div>
+        </div>
+        <aside class="choices">
+          <h3>Drag the answers</h3>
+          <div class="drag-bank">
+            <div class="drag-item" id="vis-drag-1" data-value="conversation">conversation</div>
+            <div class="drag-item" id="vis-drag-2" data-value="decision">decision</div>
+            <div class="drag-item" id="vis-drag-3" data-value="goal">goal</div>
+            <div class="drag-item" id="vis-drag-4" data-value="performance">performance</div>
+            <div class="drag-item" id="vis-drag-5" data-value="scenario">scenario</div>
+          </div>
+          <p class="mini">Tip: You can drag the words or click a word and then click a blank.</p>
+        </aside>
+      </div>
+      <div class="answers"><strong>Answers:</strong> 1 goal, 2 scenario, 3 performance, 4 decision, 5 conversation.</div>
+      <button onclick="toggleAnswers(this)">Reveal / hide answers</button>
+    </section>
+
+    <section>
+      <h2>4. Grammar focus: can, could, might</h2>
+      <p>Choose the best modal verb. Think about ability, possibility and cautious claims.</p>
+      <div class="two-col">
+        <div class="question-list">
+          <div class="q"><label>1. Visualisation ______ help people prepare for a difficult task.</label><select data-answer="can"><option value="">Choose...</option><option>can</option><option>mustn't</option><option>doesn't</option></select></div>
+          <div class="q"><label>2. Imagining every detail ______ make the image feel more realistic.</label><select data-answer="could"><option value="">Choose...</option><option>shouldn't</option><option>could</option><option>have to</option></select></div>
+          <div class="q"><label>3. This technique ______ not work for everyone in the same way.</label><select data-answer="might"><option value="">Choose...</option><option>might</option><option>has to</option><option>mustn't</option></select></div>
+          <div class="q"><label>4. Athletes ______ use mental imagery before a competition.</label><select data-answer="can"><option value="">Choose...</option><option>can</option><option>don't have to</option><option>cannot to</option></select></div>
+          <button onclick="checkSelects(this)">Check section</button><div class="check-result"></div>
+        </div>
+        <aside class="choices"><h3>Grammar reminder</h3><div class="choice-grid"><div class="choice">can = ability or general possibility</div><div class="choice">could = possible result</div><div class="choice">might = less certain possibility</div><div class="choice">Use modals + base verb</div></div></aside>
+      </div>
+      <div class="answers"><strong>Answers:</strong> 1 can, 2 could, 3 might, 4 can.</div>
+      <button onclick="toggleAnswers(this)">Reveal / hide answers</button>
+    </section>
+
+    <section>
+      <h2>5. Grammar practice: second conditional</h2>
+      <p>Complete the sentences with your own ideas. Use this structure: <strong>If + past simple, would + verb</strong>.</p>
+      <div class="question-list">
+        <div class="q"><label>1. If I visualised my goal every morning, ...</label><input type="text" placeholder="Example: I would feel more motivated." /></div>
+        <div class="q"><label>2. If I had to give an important presentation, ...</label><input type="text" placeholder="Write your ending..." /></div>
+        <div class="q"><label>3. If a person imagined failure too often, ...</label><input type="text" placeholder="Write your ending..." /></div>
+        <div class="q"><label>4. If schools taught mental preparation, ...</label><input type="text" placeholder="Write your ending..." /></div>
+      </div>
+      <div class="answers"><strong>Example answers:</strong><br>1. If I visualised my goal every morning, I would feel more motivated.<br>2. If I had to give an important presentation, I would imagine myself speaking calmly.<br>3. If a person imagined failure too often, they would probably feel more anxious.<br>4. If schools taught mental preparation, students would feel more confident before exams.</div>
+      <button onclick="toggleAnswers(this)">Reveal / hide example answers</button>
+    </section>
+
+    <section>
+      <h2>6. Critical thinking questions</h2>
+      <p class="note">These questions do not have one correct answer. Try to explain both sides before giving your opinion.</p>
+      <div class="discussion">
+        <div class="q"><label>1. Is visualisation a real skill, or is it just positive thinking?</label><textarea placeholder="Explain your opinion..."></textarea></div>
+        <div class="q"><label>2. Could visualising success make people overconfident?</label><textarea placeholder="Give reasons and examples..."></textarea></div>
+        <div class="q"><label>3. Should schools teach students how to mentally prepare for exams and interviews?</label><textarea placeholder="Write a balanced answer..."></textarea></div>
+        <div class="q"><label>4. Is it more important to imagine the final success or the steps needed to reach it?</label><textarea placeholder="Explain your answer..."></textarea></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Speaking task: visualise a challenge</h2>
+      <p>Choose one future challenge and create a mental preparation plan. Use clear, practical language.</p>
+      <div class="two-col">
+        <div class="question-list">
+          <div class="q"><label>My future challenge</label><input type="text" placeholder="Example: an exam, interview, presentation, sports event..." /></div>
+          <div class="q"><label>What I will imagine</label><textarea placeholder="Describe the scene using details: place, people, sounds, feelings..."></textarea></div>
+          <div class="q"><label>Steps I will mentally practise</label><textarea placeholder="Write 3 practical steps..."></textarea></div>
+          <div class="q"><label>How this could help me</label><input type="text" placeholder="This could help me because..." /></div>
+        </div>
+        <aside class="choices"><h3>Useful phrases</h3><div class="choice-grid"><div class="choice">I can picture myself...</div><div class="choice">The first step would be...</div><div class="choice">This might help me to...</div><div class="choice">I would try to stay calm by...</div><div class="choice">The outcome I want is...</div></div></aside>
+      </div>
+    </section>
+  </main>
+  <footer>Interactive worksheet based on the public YouTube video title: “Can visualisation help you achieve a better future? | BBC Ideas”.</footer>
+  <script>
+    function toggleAnswers(button){const section=button.closest('section');const answers=section.querySelector('.answers');answers.classList.toggle('show');}
+    function showAllAnswers(){document.querySelectorAll('.answers').forEach(a=>a.classList.add('show'));}
+    function hideAllAnswers(){document.querySelectorAll('.answers').forEach(a=>a.classList.remove('show'));}
+    function normalize(text){return (text||'').trim().toLowerCase().replace(/[’']/g,"'");}
+    function checkSelects(button){const section=button.closest('section');const selects=section.querySelectorAll('select[data-answer]');let correct=0;selects.forEach(sel=>{const isCorrect=normalize(sel.value)===normalize(sel.dataset.answer);sel.style.borderColor=isCorrect?'#236147':'#a6422b';if(isCorrect)correct++;});const result=section.querySelector('.check-result');result.textContent=`You got ${correct}/${selects.length} correct.`;result.className='check-result '+(correct===selects.length?'correct':'wrong');}
+    function checkInputs(button){const section=button.closest('section');const inputs=section.querySelectorAll('input[data-answer]');let correct=0;inputs.forEach(inp=>{const isCorrect=normalize(inp.value)===normalize(inp.dataset.answer);inp.style.borderColor=isCorrect?'#236147':'#a6422b';if(isCorrect)correct++;});const result=section.querySelector('.check-result');result.textContent=`You got ${correct}/${inputs.length} correct.`;result.className='check-result '+(correct===inputs.length?'correct':'wrong');}
+    function resetWorksheet(){document.querySelectorAll('input, textarea').forEach(el=>{el.value='';el.style.borderColor='rgba(19,34,56,.24)';});document.querySelectorAll('select').forEach(el=>{el.selectedIndex=0;el.style.borderColor='rgba(19,34,56,.24)';});document.querySelectorAll('.answers').forEach(a=>a.classList.remove('show'));document.querySelectorAll('.check-result').forEach(r=>{r.textContent='';r.className='check-result';});}
+  </script>
+
+
+  <script>
+    let selectedDragItem = null;
+
+    function setupDragDrop(){
+      document.querySelectorAll('.drag-item').forEach(item => {
+        item.setAttribute('draggable', 'true');
+        item.addEventListener('dragstart', event => {
+          event.dataTransfer.setData('text/plain', item.dataset.value || item.textContent.trim());
+          event.dataTransfer.setData('text/id', item.id);
+          selectedDragItem = item;
+        });
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.drag-item').forEach(i => i.style.outline = 'none');
+          selectedDragItem = item;
+          item.style.outline = '3px solid rgba(217,108,74,.55)';
+        });
+      });
+
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', event => {
+          event.preventDefault();
+          zone.classList.add('over');
+        });
+        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+        zone.addEventListener('drop', event => {
+          event.preventDefault();
+          zone.classList.remove('over');
+          const id = event.dataTransfer.getData('text/id');
+          const item = document.getElementById(id);
+          placeDragItem(zone, item);
+        });
+        zone.addEventListener('click', () => {
+          if(selectedDragItem){
+            placeDragItem(zone, selectedDragItem);
+            selectedDragItem.style.outline = 'none';
+            selectedDragItem = null;
+          }
+        });
+      });
+    }
+
+    function placeDragItem(zone, item){
+      if(!item) return;
+      if(zone.querySelector('.drag-item')){
+        const existing = zone.querySelector('.drag-item');
+        const bank = zone.closest('section').querySelector('.drag-bank');
+        bank.appendChild(existing);
+      }
+      zone.textContent = '';
+      zone.appendChild(item);
+      item.style.borderColor = 'rgba(19,34,56,.18)';
+      zone.style.borderColor = 'rgba(60,110,113,.45)';
+    }
+
+    function checkDragDrop(button){
+      const section = button.closest('section');
+      const zones = section.querySelectorAll('.drop-zone[data-answer]');
+      let correct = 0;
+      zones.forEach(zone => {
+        const item = zone.querySelector('.drag-item');
+        const value = item ? normalize(item.dataset.value || item.textContent) : '';
+        const isCorrect = value === normalize(zone.dataset.answer);
+        zone.style.borderColor = isCorrect ? '#236147' : '#a6422b';
+        if(item) item.style.borderColor = isCorrect ? '#236147' : '#a6422b';
+        if(isCorrect) correct++;
+      });
+      const result = section.querySelector('.check-result');
+      result.textContent = `You got ${correct}/${zones.length} correct.`;
+      result.className = 'check-result ' + (correct === zones.length ? 'correct' : 'wrong');
+    }
+
+    function resetDragDrop(){
+      document.querySelectorAll('section').forEach(section => {
+        const bank = section.querySelector('.drag-bank');
+        if(!bank) return;
+        section.querySelectorAll('.drop-zone .drag-item').forEach(item => bank.appendChild(item));
+        section.querySelectorAll('.drop-zone').forEach(zone => {
+          zone.textContent = 'Drop the answer here';
+          zone.style.borderColor = 'rgba(60,110,113,.45)';
+        });
+        bank.querySelectorAll('.drag-item').forEach(item => {
+          item.style.borderColor = 'rgba(19,34,56,.18)';
+          item.style.outline = 'none';
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', setupDragDrop);
+    const originalResetWorksheet = window.resetWorksheet;
+    window.resetWorksheet = function(){
+      if(typeof originalResetWorksheet === 'function') originalResetWorksheet();
+      resetDragDrop();
+    };
+  </script>
+
+</body>
+</html>
